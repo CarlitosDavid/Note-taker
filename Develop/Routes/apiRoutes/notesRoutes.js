@@ -5,35 +5,32 @@ const {
     createNewNotes, 
     validatreNotes,
 } = require ('../../public/assets/js/index');
-const { notes } = require('../../public/assets/js/index');
+const { notes } = require('../../data/notes');
+const fs = require("fs");
 
 
 router.get('/notes', (req, res) => {
-    let results = notes;
-    if (req.query) {
-        results = filterByQuery(req.query, results);
-    }
-    res.json(results);
+   res.json(db);
+   // reading database json file and return saved notes
 });
 
-router.delete('/notes/id:', (req, res) => {
+router.post("/api/notes", function (req, res) {
+    db.push(req.body);
+    db.forEach((obj, i) =>
+    {
+        obj.db = i +1;
+    });
+    fs.writeFile("./db/db.json", JSON.stringify(db), function () {
+        res.json(db);
+    });
+});
+
+router.delete('/data-notes/id:', (req, res) => {
     const result = findById(req.params.id, notes);
     if (result) {
         res.json(result);
     } else {
         res.send(404);
-    }
-});
-
-router.post('/notes', (req, res) => {
-    // set id based on what the next index of the array will be
-    req.body.id = notes.length.toString();
-
-    if (!validatreNotes(req.body)) {
-        res.status(400).send('note has been not been saved');
-    } else {
-        const note = createNewNotes(req.body, notes);
-        res.json(notes);
     }
 });
 
