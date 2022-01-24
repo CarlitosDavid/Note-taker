@@ -1,5 +1,12 @@
 const router = require('express').Router();
-const { filterByQuery, findById, createNewNotes, validatreNotes } = require('../../public/assets/js/index');
+const {
+    filterByQuery,
+    findById, 
+    createNewNotes, 
+    validatreNotes,
+} = require ('../../public/assets/js/index');
+const { notes } = require('../../public/assets/js/index');
+
 
 router.get('/notes', (req, res) => {
     let results = notes;
@@ -9,7 +16,7 @@ router.get('/notes', (req, res) => {
     res.json(results);
 });
 
-router.delete('/notes/:id', (req, res) => {
+router.delete('/notes/id:', (req, res) => {
     const result = findById(req.params.id, notes);
     if (result) {
         res.json(result);
@@ -25,8 +32,8 @@ router.post('/notes', (req, res) => {
     if (!validatreNotes(req.body)) {
         res.status(400).send('note has been not been saved');
     } else {
-        const note = createNewNotes(req.body, animals);
-        res.json(animal);
+        const note = createNewNotes(req.body, notes);
+        res.json(notes);
     }
 });
 
